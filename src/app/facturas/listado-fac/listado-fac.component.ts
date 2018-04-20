@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ProveedoresService } from '../../servicios/proveedores.service';
+import { FacturasService } from '../../servicios/facturas.service';
 import { trigger, state, style, animate, transition} from '@angular/animations';
-import { AutenticacionService } from '../../servicios/autenticacion.service';
 
 @Component({
-  selector: 'app-listado-prov',
-  templateUrl: './listado-prov.component.html',
-  styleUrls: ['./listado-prov.component.css'],
+  selector: 'app-listado-fac',
+  templateUrl: './listado-fac.component.html',
+  styleUrls: ['./listado-fac.component.css'],
   animations: [
     trigger('alerta',[
       state('show', style({ opacity: 1})),
@@ -16,29 +15,28 @@ import { AutenticacionService } from '../../servicios/autenticacion.service';
     ])
   ]
 })
-export class ListadoProvComponent implements OnInit {
+export class ListadoFacComponent implements OnInit {
 
   mensaje:string='Error de conexión con el servidor';
   mostrarAlerta:boolean = false;
-  proveedores:any;
+  facturas:any;
   id:string;
 
-  constructor(private proveedoresService: ProveedoresService,
-              private autenticacionService: AutenticacionService) { }
+  constructor(private facturasService: FacturasService) { }
 
   ngOnInit() {
-    this.cargarProveedores();
+    this.cargarFacturas();
   }
 
   get estadoAlerta(){
     return this.mostrarAlerta ? 'show' : 'hide';
   }
 
-  cargarProveedores(){
-    this.proveedoresService.getProveedores()
+  cargarFacturas(){
+    this.facturasService.getFacturas()
         .subscribe((resp:any)=>{
-          this.proveedores=resp.proveedores;
-          console.log(this.proveedores);
+          this.facturas=resp.facturas;
+          console.log(this.facturas);
     }, error =>{
       console.log(error);
     });
@@ -48,12 +46,12 @@ export class ListadoProvComponent implements OnInit {
     this.id = id;
   }
 
-  borrarProveedor(){ //Y en este método ya tendremos el id, por eso ponemos this.id. Esto es porque pierde el DOM y borraría el proveedor de arriba.
-    this.proveedoresService.deleteProveedor(this.id)
+  borrarFactura(){ //Y en este método ya tendremos el id, por eso ponemos this.id. Esto es porque pierde el DOM y borraría el proveedor de arriba.
+    this.facturasService.deleteFactura(this.id)
                            .subscribe((resp:any)=>{
-                            this.mensaje= "El proveedor ha sido eliminado correctamente";
+                            this.mensaje= "La factura ha sido eliminada correctamente";
                             this.mostrarAlerta = true;
-                            this.cargarProveedores()
+                            this.cargarFacturas()
                             setTimeout(()=>{
                               this.mostrarAlerta=false;
                             },2500);

@@ -1,0 +1,155 @@
+<div class="barra-fija">
+    <div title="Proveedores" routerLink="/Listado-proveedores">
+        <i class="far fa-address-book"></i>
+    </div>
+    <div title="Facturas" routerLink="/listado-facturas">
+      <i class="far fa-money-bill-alt"></i>
+    </div>
+  </div>
+<div class="col-md-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/inicio">Inicio</a></li>
+        <li class="breadcrumb-item"><a routerLink="/compras">Compras</a></li>
+        <li class="breadcrumb-item"><a routerLink="/listado-facturas">Facturas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar factura</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="col-md-12 titulo">
+    <span>Editar factura</span>
+    <button class="btn btn-primary"
+            routerLink="/listado-facturas"><strong>Volver</strong></button>
+  </div>
+  <div class="col-md-10 offset-md-1">
+    <div class="formulario">
+      <form [formGroup]="formFra" (ngSubmit)="editarFra()">
+        <div class="row">
+          <div class="col-md-6">
+          <label for="proveedor">Proveedor</label>
+          <span class="crimson" *ngIf="formFra.controls.proveedor.invalid && formFra.controls.proveedor.touched">
+              <i class="fas fa-times-circle"></i>
+              El campo es obligatorio
+          </span>
+          <span *ngIf="formFra.controls.proveedor.valid && formFra.controls.proveedor.dirty">
+              <i class="fas fa-check-circle green"></i>
+          </span>
+          <input type="text" class="form-control"
+                  formControlName="proveedor" autofocus
+                  #proveedor [(ngModel)]="factura.proveedor">
+          </div>
+          <div class="col-md-6">
+              <label for="cif">CIF</label>
+              <span class="crimson" *ngIf="formFra.controls.cif.invalid && formFra.controls.cif.touched && !formFra.value.cif">
+                  <i class="fas fa-times-circle"></i>
+                  El campo es obligatorio
+              </span>
+              <span class="crimson" *ngIf="cif && formFra.controls.cif.invalid && formFra.value.cif && formFra.controls.cif.dirty">
+                  <i class="fas fa-times-circle"></i>
+                  El campo debe tener 9 caracteres
+              </span>
+              <!-- <span class="crimson" *ngIf="!cif && formFra.value.cif">
+                  <i class="fas fa-times-circle"></i>
+                El CIF tiene debe comenzar por A o B
+              </span> -->
+              <span *ngIf="formFra.controls.cif.valid && formFra.controls.cif.dirty && cif">
+                  <i class="fas fa-check-circle green"></i>
+              </span>
+              <input type="text" class="form-control"
+                      formControlName="cif" [(ngModel)]="factura.cif" maxlength="9">
+              </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+              <label for="fecha">Fecha factura</label>
+              <input type="date" class="form-control"
+                    formControlName="fecha" [(ngModel)]="factura.fecha">
+          </div>
+          <div class="col-md-8">
+              <label for="concepto">Concepto</label>
+              <input type="text" class="form-control"
+                    formControlName="concepto" [(ngModel)]="factura.concepto">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <label for="base">Base Imponible</label>
+            <span class="crimson" *ngIf="formFra.controls.base.invalid && formFra.controls.base.touched && !formFra.value.base">
+                <i class="fas fa-times-circle"></i>
+                El campo es obligatorio
+            </span>
+            <span class="crimson" *ngIf="formFra.controls.base.invalid && formFra.controls.base.dirty && base">
+                <i class="fas fa-times-circle"></i>
+                No puede superar los 100.000,00 €
+            </span>
+            <span *ngIf="formFra.controls.base.valid && formFra.controls.base.dirty">
+                <i class="fas fa-check-circle green"></i>
+            </span>
+            <input type="number" class="form-control"
+                    formControlName="base" [(ngModel)]="factura.base">
+          </div>
+          <div class="col-md-4">
+            <div class="radiobotones">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" formControlName="retencion" [value]=true [(ngModel)]="factura.retencion">
+                <label class="form-check-label">
+                  Con retención IRPF
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" formControlName="retencion" [value]=false [(ngModel)]="factura.retencion">
+                <label class="form-check-label">
+                  Sin retención IRPF
+                </label>
+              </div>
+            </div>  
+          </div>
+          <div class="col-md-4">
+            <label for="tipo">% IVA</label>
+            <select class="form-control"
+                    formControlName="tipo" [(ngModel)]="factura.tipo">
+            <option value="0">0 %</option>
+            <option value="0.04">4 %</option>
+            <option value="0.1">10 %</option>
+            <option value="0.21">21 %</option>
+            </select> 
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4" *ngIf="!retencion"></div>
+          <div class="col-md-4" *ngIf="retencion">
+            <label for="irpf">Retención IRPF</label>
+            <input type="text" class="form-control"
+                  formControlName="irpf"
+                   [(ngModel)]="formFra.value.irpf" readonly >
+          </div>
+          <div class="col-md-4">
+            <label for="importe">Importe IVA</label>
+            <input type="text" class="form-control"
+                  formControlName="importe"
+                  [(ngModel)]="formFra.value.importe" readonly>
+          </div>
+          <div class="col-md-4">
+            <label for="total">Total factura IVA incluido</label>
+            <input type="text" class="form-control"
+                    formControlName="total"
+                    [(ngModel)]="formFra.value.total" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+              <button type="submit" class="btn btn-primary margen-crear">
+                  <span *ngIf="!enviando"> Guardar Cambios </span>
+                  <span *ngIf="enviando"><i class="fas fa-spinner fa-pulse"></i></span>
+                </button>
+                <button routerLink="/listado-facturas" 
+                        class="btn btn-danger margen-crear">
+                  Cancelar
+                </button>
+          </div>
+        </div>
+        </form>
+        <p class="alert alert-warning"
+                [@alerta]="estadoAlerta">{{mensaje}}</p>
+    </div>
+  </div>

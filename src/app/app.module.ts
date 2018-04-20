@@ -13,14 +13,31 @@ import { CabeceraComponent } from './cabecera/cabecera.component';
 import { ProveedoresService } from './servicios/proveedores.service';
 import { CrearProvComponent } from './proveedores/crear-prov/crear-prov.component';
 import { EditarProvComponent } from './proveedores/editar-prov/editar-prov.component';
+import { ListadoFacComponent } from './facturas/listado-fac/listado-fac.component';
+import { FacturasService } from './servicios/facturas.service';
+import { CrearFacComponent } from './facturas/crear-fac/crear-fac.component';
+import { EditarFacComponent } from './facturas/editar-fac/editar-fac.component';
+import { RegistroComponent } from './autenticacion/registro/registro.component';
+import { AutenticacionService } from './servicios/autenticacion.service';
+import { LoginComponent } from './autenticacion/login/login.component';
+import { ListadoClieComponent } from './clientes/listado-clie/listado-clie.component';
+import { AutenticacionGuard } from './servicios/autenticacion.guard';
+import { ListadoUsuariosComponent } from './autenticacion/listado-usuarios/listado-usuarios.component';
 
 
 const rutas: Routes=[
   {path: '', component: InicioComponent},
-  {path: 'compras', component: ComprasComponent},
-  {path: 'Listado-proveedores', component: ListadoProvComponent},
-  {path: 'crear-proveedor', component: CrearProvComponent},
-  {path: 'editar-proveedor/:id', component: EditarProvComponent}, //Ademas va a recibir un id
+  {path: 'registro', component: RegistroComponent},
+  {path: 'inicio-sesion', component: LoginComponent},
+  {path: 'listado-usuarios', component: ListadoUsuariosComponent, canActivate: [AutenticacionGuard]},
+  {path: 'compras', component: ComprasComponent, canActivate: [AutenticacionGuard]},
+  {path: 'Listado-proveedores', component: ListadoProvComponent, canActivate: [AutenticacionGuard]},
+  {path: 'crear-proveedor', component: CrearProvComponent, canActivate: [AutenticacionGuard]},
+  {path: 'editar-proveedor/:id', component: EditarProvComponent, canActivate: [AutenticacionGuard]}, //Ademas va a recibir un id
+  {path: 'listado-facturas', component: ListadoFacComponent, canActivate: [AutenticacionGuard]},
+  {path: 'crear-factura', component: CrearFacComponent, canActivate: [AutenticacionGuard]},
+  {path: 'editar-factura/:id', component: EditarFacComponent, canActivate: [AutenticacionGuard]},
+  {path: 'listado-clientes', component: ListadoClieComponent, canActivate: [AutenticacionGuard]},
   {path: '**', component: InicioComponent}
 ];
 
@@ -32,7 +49,14 @@ const rutas: Routes=[
     ListadoProvComponent,
     CabeceraComponent,
     CrearProvComponent,
-    EditarProvComponent
+    EditarProvComponent,
+    ListadoFacComponent,
+    CrearFacComponent,
+    EditarFacComponent,
+    RegistroComponent,
+    LoginComponent,
+    ListadoClieComponent,
+    ListadoUsuariosComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +65,7 @@ const rutas: Routes=[
     ReactiveFormsModule,
     BrowserAnimationsModule
   ],
-  providers: [ProveedoresService],
+  providers: [ProveedoresService,FacturasService, AutenticacionService, AutenticacionGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
