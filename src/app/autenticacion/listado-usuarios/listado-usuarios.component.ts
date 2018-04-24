@@ -38,6 +38,7 @@ export class ListadoUsuariosComponent implements OnInit {
   enviando: boolean = false;
   mensaje: string = "Error de conexión con el servidor";
   editarFila: string;
+  id:string;
 
   constructor(private autenticacionService: AutenticacionService,
               private cuf: FormBuilder,
@@ -131,15 +132,32 @@ export class ListadoUsuariosComponent implements OnInit {
   }
 
   editarUsuario(id){
+    this.enviando=true;
     this.usuario = this.guardarUsuarioEditado();
     this.autenticacionService.putUsuario(id,this.usuario)
-                             .subscribe((res:any)=>{
-                              console.log(res)
-                             }, (error)=>{
-                               console.log(error);
-                             });
-
-    this.editarFila='';
+                              .subscribe((res:any)=>{
+                                this.enviando=false;
+                                this.mostrarAlerta = true;
+                                this.mensaje= 'Usuario actualizado correctamente';
+                                this.editarFila='';
+                                this.cargarUsuarios();
+                                setTimeout(()=>{
+                                  this.mostrarAlerta=false;
+                                },2500)
+                              },(error:any)=>{
+                                this.mostrarAlerta=true;
+                                this.enviando=false;
+                                if (error.error.errores.errors.email.message){
+                                  this.mensaje = error.error.errores.errors.email.message;
+                                }
+                                setTimeout(()=>{
+                                  this.mostrarAlerta=false;
+                                },2500)
+                              });
+                              setTimeout(()=>{
+                                this.mensaje="Error de conexión con el servidor";
+                              },5000)
+    
   }
 
   guardarUsuarioEditado(){
@@ -149,6 +167,33 @@ export class ListadoUsuariosComponent implements OnInit {
       rol: this.editarUsuarioForm.get('rol').value
     }
     return guardarUsuarioEditado;
+  }
+
+  getId(id){
+    this.id=id;
+  }
+
+  borrarUsuario(){
+    this.enviando = true;
+    this.autenticacionService.deleteUsuario(this.id)
+                              .subscribe((res:any)=>{
+                                this.enviando=false;
+                                this.mostrarAlerta = true;
+                                this.mensaje= 'Usuario eliminado correctamente';
+                                this.cargarUsuarios();
+                                setTimeout(()=>{
+                                  this.mostrarAlerta=false;
+                                },2500)
+                                setTimeout(()=>{
+                                  this.mensaje="Error de conexión con el servidor";
+                                },5000)
+                              },(error:any)=>{
+                                this.mostrarAlerta=true;
+                                this.enviando=false;
+                                setTimeout(()=>{
+                                  this.mostrarAlerta=false;
+                                },2500)
+                              });
   }
 
 }

@@ -44,6 +44,15 @@ export class AutenticacionService {
                     });
   }
 
+  deleteUsuario(id){
+    let url = "http://localhost:3000/usuario/";
+    return this.http.delete(url+id)
+                    .map((resp:any)=>{
+                      return resp;
+                    });
+  }
+
+
   login(usuario){
     let url = "http://localhost:3000/login";
     return this.http.post(url,usuario)
