@@ -3,6 +3,7 @@ import { FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { AutenticacionService } from '../../servicios/autenticacion.service';
 import { Router } from '@angular/router';
 import { trigger, state, style, animate, transition} from '@angular/animations';
+import { SesionesService } from '../../servicios/sesiones.service';
 
 @Component({
   selector: 'app-login',
@@ -21,12 +22,14 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   usuario: any;
+  sesion: any;
   mensaje:string='Error de conexión con el servidor';
   mostrarAlerta:boolean = false;
   enviando:boolean=false;
 
   constructor(private fl: FormBuilder,
               private autenticacionService: AutenticacionService,
+              private sesionesService: SesionesService,
               private router: Router) { }
 
   ngOnInit() {
@@ -48,6 +51,7 @@ export class LoginComponent implements OnInit {
                              .subscribe((res:any)=>{
                               console.log(res);
                               this.enviando=false;
+                              this.crearSesion();
                               this.router.navigate(['/']);
                              },(error:any)=>{
                                this.mostrarAlerta=true;
@@ -55,6 +59,7 @@ export class LoginComponent implements OnInit {
                                  this.mensaje = error.error.mensaje;
                                }
                              });
+    
     
   }
 
@@ -65,5 +70,20 @@ export class LoginComponent implements OnInit {
     }
     return guardarUsuario;
 }
+
+
+  crearSesion(){
+    this.sesion = {
+      nombre: this.autenticacionService.nombre,
+      login: new Date()
+     
+    }
+    this.sesionesService.postSesion(this.sesion)
+                        .subscribe((res:any)=>{
+                          console.log(res);                 
+                        },(error)=>{
+                          console.log(error);
+                        })
+                      }                       
 
 }

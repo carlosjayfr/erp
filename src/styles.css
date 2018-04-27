@@ -60,7 +60,17 @@
 }
 .naranja span{
     color:#dbbfac;
+}
+.gris{
+    background-color: rgb(71, 71, 71);
+} 
+.gris:hover{
+    background-color: rgb(107, 107, 107);
 }  
+.gris span{
+    color: rgb(156, 156, 156); 
+}
+
 
 .box span{
     font-size:80px;
@@ -191,10 +201,10 @@
     height: 40px;
 }
 
-.cabecera .campo:nth-child(1) { width: 30%; }
+.cabecera .campo:nth-child(1) { width: 20%; }
 .cabecera .campo:nth-child(2) { width: 30%; }
 .cabecera .campo:nth-child(3) { width: 30%; }
-.cabecera .campo:nth-child(4) { width: 10%; }
+.cabecera .campo:nth-child(4) { width: 20%; }
 
 .cabecera .campo p {
     font-weight: bold;
@@ -216,11 +226,11 @@
     padding-left:4px;
 }
 
-.fila .campo:nth-child(1) { width: 30%; }
+.fila .campo:nth-child(1) { width: 20%; }
 .fila .campo:nth-child(2) { width: 30%; }
 .fila .campo:nth-child(3) { width: 30%; }
 .fila .campo:nth-child(4) { 
-    width: 10%; 
+    width: 20%; 
     border-bottom:none;
 }
 
@@ -286,4 +296,14 @@ form.fila:first-child(1){
 
 .fila.editable select {
     width:100%;
+}
+
+.paginacion {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.paginacion button{
+    margin:10px;
 }

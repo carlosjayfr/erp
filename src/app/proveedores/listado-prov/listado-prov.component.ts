@@ -22,6 +22,8 @@ export class ListadoProvComponent implements OnInit {
   mostrarAlerta:boolean = false;
   proveedores:any;
   id:string;
+  desde:number = 0;
+  totales:number;
 
   constructor(private proveedoresService: ProveedoresService,
               private autenticacionService: AutenticacionService) { }
@@ -35,13 +37,26 @@ export class ListadoProvComponent implements OnInit {
   }
 
   cargarProveedores(){
-    this.proveedoresService.getProveedores()
+    this.proveedoresService.getProveedores(this.desde)
         .subscribe((resp:any)=>{
           this.proveedores=resp.proveedores;
+          this.totales=resp.totales;
           console.log(this.proveedores);
     }, error =>{
       console.log(error);
     });
+  }
+
+  setDesde(valor){
+    var desde = this.desde + valor; //Esto es para que no se actualize en el this.desde, porque si no estaría sumando, aunque no lo mostrase
+    if (desde>=this.totales){
+      return; //Quiere decir, no hace nada
+    } else if (desde<0){
+      return;
+    } else {
+      this.desde += valor;
+      this.cargarProveedores();
+    }
   }
 
   obtenerId(id){ //En este metodo nos va a permitir sacar el id del proveedor cuando le demos al primer boton de borrar

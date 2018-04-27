@@ -12,11 +12,14 @@ export class AutenticacionService {
   constructor(private http: HttpClient,
               private router: Router) { 
     this.cargarCredenciales(); //Lo llamamos al principio para que nos compruebe si ya tenemos iniciada la sesion o no
+    this.cargarInicioSesion();
+    console.log(this.ultimoLogin);
   }
 
   token:string;
   nombre:string;
   rol:string;
+  ultimoLogin:any;
 
   getUsuarios(){
     let url = 'http://localhost:3000/usuario';
@@ -58,6 +61,7 @@ export class AutenticacionService {
     return this.http.post(url,usuario)
                     .map((resp:any)=>{
                       this.guardarCredenciales(resp.token,resp.nombre,resp.rol);
+                      this.guardarInicioSesion();
                       return resp;
                     });
 
@@ -72,6 +76,12 @@ guardarCredenciales(token,nombre,rol){
   this.rol=rol;
 }
 
+guardarInicioSesion(){
+  var inicioSesion = new Date();
+  localStorage.setItem('ultimoLogin',JSON.stringify(inicioSesion));
+  this.ultimoLogin=inicioSesion;
+}
+
 cargarCredenciales(){
   if (localStorage.getItem('token')){
     this.token=localStorage.getItem('token');
@@ -84,6 +94,14 @@ cargarCredenciales(){
   }
 }
 
+cargarInicioSesion(){
+  if (localStorage.getItem('ultimoLogin')){
+    this.ultimoLogin= JSON.parse(localStorage.getItem('ultimoLogin'));
+  } else {
+    this.ultimoLogin='';
+  }
+}
+
 isLogged(){
   return (this.token.length > 0) ? true : false;
 }
@@ -92,9 +110,11 @@ logout(){
   localStorage.removeItem('token');
   localStorage.removeItem('nombre');
   localStorage.removeItem('rol');
+  localStorage.removeItem('ultimoLogin');
   this.token='';
   this.nombre='';
   this.rol='';
+  this.ultimoLogin='';
   this.router.navigate(['/']);
 }
 

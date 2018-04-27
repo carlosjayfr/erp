@@ -23,6 +23,8 @@ import { LoginComponent } from './autenticacion/login/login.component';
 import { ListadoClieComponent } from './clientes/listado-clie/listado-clie.component';
 import { AutenticacionGuard } from './servicios/autenticacion.guard';
 import { ListadoUsuariosComponent } from './autenticacion/listado-usuarios/listado-usuarios.component';
+import { SesionesComponent } from './autenticacion/sesiones/sesiones.component';
+import { SesionesService } from './servicios/sesiones.service';
 
 
 const rutas: Routes=[
@@ -32,6 +34,7 @@ const rutas: Routes=[
   {path: 'listado-usuarios', component: ListadoUsuariosComponent, canActivate: [AutenticacionGuard]},
   {path: 'compras', component: ComprasComponent, canActivate: [AutenticacionGuard]},
   {path: 'Listado-proveedores', component: ListadoProvComponent, canActivate: [AutenticacionGuard]},
+  {path: 'listado-sesiones/:nombre', component: SesionesComponent, canActivate: [AutenticacionGuard]},
   {path: 'crear-proveedor', component: CrearProvComponent, canActivate: [AutenticacionGuard]},
   {path: 'editar-proveedor/:id', component: EditarProvComponent, canActivate: [AutenticacionGuard]}, //Ademas va a recibir un id
   {path: 'listado-facturas', component: ListadoFacComponent, canActivate: [AutenticacionGuard]},
@@ -56,7 +59,8 @@ const rutas: Routes=[
     RegistroComponent,
     LoginComponent,
     ListadoClieComponent,
-    ListadoUsuariosComponent
+    ListadoUsuariosComponent,
+    SesionesComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +69,7 @@ const rutas: Routes=[
     ReactiveFormsModule,
     BrowserAnimationsModule
   ],
-  providers: [ProveedoresService,FacturasService, AutenticacionService, AutenticacionGuard],
+  providers: [ProveedoresService,FacturasService, AutenticacionService, AutenticacionGuard,SesionesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
