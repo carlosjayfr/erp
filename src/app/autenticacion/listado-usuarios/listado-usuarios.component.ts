@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AutenticacionService } from '../../servicios/autenticacion.service';
 import { FormGroup, FormControl, FormBuilder, Validators} from '@angular/forms';
 import { trigger, state, style, animate, transition} from '@angular/animations';
+import { SesionesService } from '../../servicios/sesiones.service';
 
 @Component({
   selector: 'app-listado-usuarios',
@@ -39,8 +40,10 @@ export class ListadoUsuariosComponent implements OnInit {
   mensaje: string = "Error de conexión con el servidor";
   editarFila: string;
   id:string;
+  online:any = [];
 
   constructor(private autenticacionService: AutenticacionService,
+              private sesionesServive: SesionesService,
               private cuf: FormBuilder,
               private euf: FormBuilder) { }
 
@@ -75,6 +78,20 @@ export class ListadoUsuariosComponent implements OnInit {
     this.autenticacionService.getUsuarios()
                              .subscribe((res:any)=>{
                               this.usuarios=res.usuarios;
+                              this.usuarios.forEach(usuario => {
+                                this.sesionesServive.getSesiones(usuario.nombre)
+                                .subscribe((resp:any)=>{
+                                  //Cuando sea par esta offline
+                                  if (resp.sesiones.length % 2 !== 0){
+                                    this.online.push(true);
+                                  } else {
+                                    this.online.push(false);
+                                  }
+                                },(error)=>{
+                                  console.log(error);
+                                })
+                              });
+                              console.log(this.online);
                              },(error)=>{
                               console.log(error);
                              });
@@ -196,4 +213,5 @@ export class ListadoUsuariosComponent implements OnInit {
                               });
   }
 
+ 
 }

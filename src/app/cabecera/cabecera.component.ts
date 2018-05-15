@@ -23,10 +23,28 @@ export class CabeceraComponent implements OnInit {
   }
 
   crearSesion(){
+
+    var ultimoLogin=JSON.parse(localStorage.getItem('ultimoLogin'));
+    var ultimoLoginMs = new Date(ultimoLogin).valueOf();
+    var fechaActualMs = new Date().valueOf();
+    //Pasamos de milisegundos a segundos
+    var duracionS = (fechaActualMs - ultimoLoginMs)/1000;
+    
+    var s = Math.floor( duracionS  % 60 );
+    var ss = ("0" + s).slice(-2);
+    var m = Math.floor( (duracionS % 3600) / 60 );
+    var mm = ("0" + m).slice(-2);
+    var h = Math.floor( duracionS / 3600 );
+    var hh = ("0" + h).slice(-2);
+    
+
     this.sesion = {
       nombre: this.autenticacionService.nombre,
       logout: new Date(),
+      duracion: hh + ' horas ' + mm + ' minutos ' + ss + ' segundos '
     }
+
+    console.log(this.sesion);
     this.sesionService.postSesion(this.sesion)
                       .subscribe((resp:any)=>{
                         console.log(resp);

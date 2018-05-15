@@ -54,12 +54,14 @@
     </div>
     <div class="container">
       <div class="cabecera">
+        <div class="campo"><p>Online</p></div>
         <div class="campo"><p>Nombre</p></div>
         <div class="campo"><p>Correo Electrónico</p></div>
         <div class="campo"><p>Rol de usuario</p></div>
         <div class="campo"></div>
       </div>
-      <div *ngFor="let usuario of usuarios">
+      <!--Indice para el recoger el que esta online-->
+      <div *ngFor="let usuario of usuarios; let i=index">
         <form class="fila editable" [formGroup]="editarUsuarioForm" *ngIf="editarFila === usuario._id">
           <div class="campo">
             <input type="text" formControlName="nombre" [(ngModel)]="usuario.nombre">
@@ -92,6 +94,14 @@
         </form>
        
         <div class="fila" *ngIf="usuario._id !== editarFila">
+          <div class="campo">
+            <span *ngIf="online[i]">
+                <i class="fas fa-check-circle valido"></i>
+            </span>
+            <span *ngIf="!online[i]">
+                <i class="fas fa-times-circle no-valido"></i>
+            </span>
+          </div>
           <div class="campo">{{usuario.nombre}}</div>
           <div class="campo">{{usuario.email}}</div>
           <div class="campo">{{usuario.rol}}</div>
